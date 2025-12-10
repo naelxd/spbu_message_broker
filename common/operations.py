@@ -23,4 +23,3 @@ def apply_operation(operation: str, values: Sequence[float]) -> float:
         return a / b
 
     raise OperationError(f"Unsupported operation: {operation}")
-

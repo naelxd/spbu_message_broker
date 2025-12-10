@@ -21,7 +21,8 @@ def main() -> None:
     cfg = get_settings()
     parameters = build_parameters(cfg)
 
-    LOGGER.info("Producer connecting to RabbitMQ at %s:%s", cfg.rabbit_host, cfg.rabbit_port)
+    LOGGER.info("Producer connecting to RabbitMQ at %s:%s",
+                cfg.rabbit_host, cfg.rabbit_port)
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
     setup_topology(channel, cfg)
@@ -31,7 +32,8 @@ def main() -> None:
             payload = {
                 "id": str(uuid.uuid4()),
                 "operation": random.choice(OPERATIONS),
-                "values": [round(random.uniform(1, 20), 2), round(random.uniform(0, 10), 2)],
+                "values": [round(random.uniform(1, 20), 2),
+                           round(random.uniform(0, 10), 2)],
                 "timestamp": time.time(),
             }
             publish_message(channel, cfg, payload)
@@ -44,4 +46,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

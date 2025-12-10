@@ -24,4 +24,3 @@ def test_apply_operation_unsupported():
 def test_apply_operation_divide_by_zero():
     with pytest.raises(OperationError):
         apply_operation("divide", [1, 0])
-

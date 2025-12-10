@@ -14,13 +14,16 @@ logging.basicConfig(
 LOGGER = logging.getLogger(__name__)
 
 
-def handle_message(channel: pika.adapters.blocking_connection.BlockingChannel, method: pika.spec.Basic.Deliver, properties: pika.BasicProperties, body: bytes, cfg) -> None:
+def handle_message(channel: pika.adapters.blocking_connection.BlockingChannel,
+                   method: pika.spec.Basic.Deliver,
+                   properties: pika.BasicProperties, body: bytes, cfg) -> None:
     try:
         payload = json.loads(body.decode())
         result = apply_operation(payload["operation"], payload["values"])
         LOGGER.info("Processed task %s result=%s", payload.get("id"), result)
         channel.basic_ack(delivery_tag=method.delivery_tag)
-    except (KeyError, json.JSONDecodeError, OperationError, ZeroDivisionError) as exc:
+    except (KeyError, json.JSONDecodeError,
+            OperationError, ZeroDivisionError) as exc:
         LOGGER.error("Failed to process message: %s (%s)", body, exc)
         channel.basic_reject(delivery_tag=method.delivery_tag, requeue=False)
 
@@ -29,7 +32,8 @@ def main() -> None:
     cfg = get_settings()
     parameters = build_parameters(cfg)
 
-    LOGGER.info("Consumer connecting to RabbitMQ at %s:%s", cfg.rabbit_host, cfg.rabbit_port)
+    LOGGER.info("Consumer connecting to RabbitMQ at %s:%s",
+                cfg.rabbit_host, cfg.rabbit_port)
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
     setup_topology(channel, cfg)
@@ -54,4 +58,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
