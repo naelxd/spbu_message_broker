@@ -12,6 +12,13 @@ docker compose up --build
 - RabbitMQ UI: http://localhost:15672 (guest/guest).
 - Producer логирует отправку, Consumer — обработку. Ошибочные сообщения попадают в очередь `tasks.dlq`.
 
+## Фоновый запуск и просмотр логов
+```bash
+docker-compose up -d --build
+docker compose logs producer
+docker compose logs consumer
+```
+
 ## Переменные окружения
 - `RABBITMQ_HOST` (default `rabbitmq`)
 - `RABBITMQ_PORT` (default `5672`)
@@ -24,6 +31,13 @@ docker compose up --build
 pip install -r requirements.txt
 pytest
 flake8 .
+```
+
+## Очистка
+
+```bash
+docker compose down
+docker image prune -a
 ```
 
 ## CI/CD (GitHub Actions)
